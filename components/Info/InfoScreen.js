@@ -5,14 +5,11 @@ import {
 
 // eslint-disable-next-line react/prefer-stateless-function
 class InfoScreen extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     viewConsole = this.viewConsole;
-    // }
+  // constructor(props) {
+  //     super(props);
+  //     viewConsole = this.viewConsole;
+  // }
 
-    viewConsole(name) {
-        console.log(name);
-    }
 
   render() {
     const { navigation } = this.props;
@@ -26,7 +23,7 @@ class InfoScreen extends Component {
             { key: 'EC' },
             { key: 'Water' },
             { key: 'DHT' },
-            { key: 'Activity Log' },
+            { key: 'ActivityLog' },
           ]}
           renderItem={({ item }) => (
             <TouchableHighlight onPress={() => navigation.navigate(item.key)}>
