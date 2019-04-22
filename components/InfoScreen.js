@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View, FlatList, StyleSheet, Text, TouchableHighlight
 } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 class InfoScreen extends Component {
   // constructor(props) {
@@ -42,17 +41,12 @@ class InfoScreen extends Component {
     );
   }
 }
-// const StackNavigator = createStackNavigator({
-//   PH: PHScreen,
-//   SoilHumidity: SHScreen,
-//   Light: LightScreen,
 
-// })
 const styles = StyleSheet.create({
   item: {
-    padding: 35,
+    padding: 10,
     fontSize: 18,
-    height: 44
+    height: 30
   }
 });
 
