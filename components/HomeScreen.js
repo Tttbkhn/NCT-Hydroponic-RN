@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, StyleSheet, Image, ActivityIndicator, Alert
+  View, Text, FlatList, StyleSheet, Image, ActivityIndicator, Alert, ImageBackground
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Button } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class HomeScreen extends Component {
   static navigationOptions = {
@@ -42,6 +44,15 @@ export default class HomeScreen extends Component {
     Alert.alert(name);
   }
 
+  renderSeperator = () => (
+    <View
+      style={{
+        height: 1,
+        backgroundColor: '#CED0CE',
+      }}
+    />
+  )
+
   render() {
     const { isLoading } = this.state;
     const { dataSource } = this.state;
@@ -54,22 +65,34 @@ export default class HomeScreen extends Component {
     }
 
     return (
-      <View style={{ flex: 1, paddingTop: 20 }}>
-        <FlatList
-          data={dataSource}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={{ uri: item.flower_image_url }} style={styles.imageView} />
-              <Text
-                onPress={this.getItem.bind(this, item.flower_name)}
-                style={styles.textView}
-              >
-                {item.flower_name}
-              </Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+      <View style={{ flex: 1, paddingTop: 10 }}>
+        <ScrollView>
+          <View>
+            <ImageBackground source={{ uri: dataSource[0].flower_image_url }} style={styles.mainImageView}>
+              {/* <Image source={{ uri: dataSource[0].flower_image_url}} style={styles.mainImageView} /> */}
+              <Text style={styles.mainTextView}>{dataSource[0].flower_name}</Text>
+            </ImageBackground>
+          </View>
+          <FlatList
+            data={dataSource.slice(1)}
+            renderItem={({ item }) => (
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <Image source={{ uri: item.flower_image_url }} style={styles.imageView} />
+                <View style={{ flex: 1, flexDirection: 'column' }}>
+                  <Text
+                    onPress={this.getItem.bind(this, item.flower_name)}
+                    style={styles.textView}
+                  >
+                    {item.flower_name}
+                  </Text>
+                  <Text style={styles.textView}>{item.flower_name}</Text>
+                </View>
+              </View>
+            )}
+            ItemSeparatorComponent={this.renderSeperator}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </ScrollView>
       </View>
     );
   }
@@ -86,11 +109,22 @@ const styles = StyleSheet.create({
   },
 
   textView: {
-
-    width: '50%',
     textAlignVertical: 'center',
     padding: 10,
     color: '#000'
 
   },
+  mainImageView: {
+    borderRadius: 7,
+    position: 'relative',
+    height: 200
+  },
+  mainTextView: {
+    fontWeight: 'bold',
+    color: 'white',
+    position: 'absolute',
+    bottom: 10,
+    left: 20,
+    fontSize: 20
+  }
 });
