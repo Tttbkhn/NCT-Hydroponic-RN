@@ -44,7 +44,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const TabNavigator = createBottomTabNavigator({
   Home: HomeScreen,
-  InfoStack: InfoStackScreen,
+  Info: InfoStackScreen,
   Control: ControlScreen,
   User: UserScreen,
   Contact: ContactScreen
@@ -64,7 +64,17 @@ TabNavigator.navigationOptions = ({ navigation }) => {
   const { routeName } = navigation.state.routes[navigation.state.index];
   const headerTitle = routeName;
   return {
-    headerTitle,
+    headerTitle
+  };
+};
+
+const StackNavigator = createStackNavigator({
+  MyTab: {
+    screen: TabNavigator,
+  },
+},
+{
+  defaultNavigationOptions: {
     headerStyle: {
       backgroundColor: '#f4511e',
     },
@@ -81,14 +91,8 @@ TabNavigator.navigationOptions = ({ navigation }) => {
         overlayContainerStyle={{ backgroundColor: '#f4511e' }}
         containerStyle={{ marginRight: 5 }}
       />
-    ),
-  };
-};
-
-const StackNavigator = createStackNavigator({
-  MyTab: {
-    screen: TabNavigator,
-  }
+    )
+  },
 });
 
 const AppContainer = createAppContainer(StackNavigator);
