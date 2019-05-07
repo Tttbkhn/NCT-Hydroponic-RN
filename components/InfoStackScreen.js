@@ -14,7 +14,6 @@ const InfoStackNavigator = createStackNavigator({
   SoilHumidity: SHScreen,
   Light: LightScreen,
   EC: ECScreen,
-  Water: WaterScreen,
   DHT: DHTScreen,
   ActivityLog: ActivityLogScreen,
 },
