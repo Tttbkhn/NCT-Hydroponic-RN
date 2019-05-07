@@ -1,37 +1,62 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, StyleSheet, Text, TouchableHighlight
+  View, FlatList, StyleSheet, Text, TouchableHighlight, Image,
 } from 'react-native';
+import pH from '../images/pH.png';
+import activitylog from '../images/activitylog.png';
+import DHT from '../images/DHT.png';
+import EC from '../images/EC.png';
+import light from '../images/light.png';
+import soilhumidity from '../images/soilhumidity.png';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class InfoScreen extends Component {
-  // constructor(props) {
-  //     super(props);
-  //     viewConsole = this.viewConsole;
-  // }
-
-
   render() {
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <FlatList
           data={[
-            { key: 'PH' },
-            { key: 'SoilHumidity' },
-            { key: 'Light' },
-            { key: 'EC' },
-            { key: 'Water' },
-            { key: 'DHT' },
-            { key: 'ActivityLog' },
+            {
+              key: 'PH',
+              logo: pH
+            },
+            {
+              key: 'Soil Humidity',
+              logo: soilhumidity
+            },
+            {
+              key: 'Light',
+              logo: light
+            },
+            {
+              key: 'EC',
+              logo: EC
+            },
+            {
+              key: 'DHT',
+              logo: DHT
+            },
+            {
+              key: 'Activity Log',
+              logo: activitylog
+            },
           ]}
           renderItem={({ item }) => (
-            <TouchableHighlight onPress={() => navigation.navigate(item.key)}>
-            {/* this.viewConsole(item.key)} */}
-              <Text style={styles.item}>{item.key}</Text>
-            </TouchableHighlight>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <Image
+                style={{ width: 50, height: 50 }}
+                source={item.logo}
+              />
+              <TouchableHighlight onPress={() => navigation.navigate(item.key.replace(/\s/g, ''))}>
+                {/* \s is the regex for "whitespace", and g is the "global" flag, meaning match ALL \s (whitespaces). */}
+                {/* this.viewConsole(item.key)} */}
+                <Text style={styles.item}>{item.key}</Text>
+              </TouchableHighlight>
+            </View>
           )}
         />
+
       </View>
     );
   }

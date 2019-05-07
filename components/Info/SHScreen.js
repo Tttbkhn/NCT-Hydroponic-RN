@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
+// eslint-disable-next-line react/prefer-stateless-function
 export default class SHScreen extends Component {
   render() {
     return (
