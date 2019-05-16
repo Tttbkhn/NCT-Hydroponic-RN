@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import {
   View, FlatList, StyleSheet, Text, TouchableHighlight, Image,
@@ -50,7 +51,6 @@ class InfoScreen extends Component {
               />
               <TouchableHighlight onPress={() => navigation.navigate(item.key.replace(/\s/g, ''))}>
                 {/* \s is the regex for "whitespace", and g is the "global" flag, meaning match ALL \s (whitespaces). */}
-                {/* this.viewConsole(item.key)} */}
                 <Text style={styles.item}>{item.key}</Text>
               </TouchableHighlight>
             </View>

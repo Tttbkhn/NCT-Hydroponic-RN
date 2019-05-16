@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  StyleSheet
-} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import { Avatar } from 'react-native-elements';
@@ -10,6 +7,7 @@ import HomeScreen from './components/HomeScreen';
 import UserScreen from './components/UserScreen';
 import ContactScreen from './components/ContactScreen';
 import ControlScreen from './components/ControlScreen';
+import LoginScreen from './components/LoginScreen';
 
 export default class App extends React.Component {
   componentDidMount() {
@@ -72,9 +70,10 @@ const StackNavigator = createStackNavigator({
   MyTab: {
     screen: TabNavigator,
   },
+  Login: LoginScreen
 },
 {
-  defaultNavigationOptions: {
+  defaultNavigationOptions: ({ navigation }) => ({
     headerStyle: {
       backgroundColor: '#f4511e',
     },
@@ -86,14 +85,15 @@ const StackNavigator = createStackNavigator({
       <Avatar
         rounded
         icon={{ name: 'user', type: 'font-awesome', color: 'white' }}
-        onPress={() => console.log('Works!')}
+        onPress={() => navigation.navigate('Login')}
         activeOpacity={0.7}
         overlayContainerStyle={{ backgroundColor: '#f4511e' }}
         containerStyle={{ marginRight: 5 }}
       />
     )
-  },
+  }),
 });
+
 
 const AppContainer = createAppContainer(StackNavigator);
 
