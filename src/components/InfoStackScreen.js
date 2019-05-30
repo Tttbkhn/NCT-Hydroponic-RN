@@ -4,7 +4,6 @@ import SHScreen from './Info/SHScreen';
 import InfoScreen from './Info/InfoScreen';
 import LightScreen from './Info/LightScreen';
 import ECScreen from './Info/ECScreen';
-import WaterScreen from './Info/WaterScreen';
 import DHTScreen from './Info/DHTScreen';
 import ActivityLogScreen from './Info/ActivityLogScreen';
 

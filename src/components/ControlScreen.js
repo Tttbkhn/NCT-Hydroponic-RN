@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Alert, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
+import { TextInput } from 'react-native-gesture-handler';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class ControlScreen extends Component {

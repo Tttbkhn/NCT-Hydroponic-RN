@@ -17,7 +17,7 @@ class InfoScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 40 }}>
         <FlatList
           data={[
             { key: 'PH' },

@@ -3,8 +3,21 @@ import {
   View, Text, FlatList, StyleSheet, Image, ActivityIndicator, Alert, ImageBackground
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Notifications, Permissions } from 'expo';
 import { Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
+
+
+async function register() {
+  const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  if (status !== 'granted') {
+    alert('You need to enable permission in settings');
+    return;
+  }
+  const token = await Notifications.getExpoPushTokenAsync();
+  console.log(status, token);
+}
+
 
 export default class HomeScreen extends Component {
   static navigationOptions = {
@@ -25,6 +38,11 @@ export default class HomeScreen extends Component {
     this.getItem = this.getItem.bind(this);
   }
 
+  componentWillMount() {
+    register();
+    this.listener = Notifications.addListener(this.listen)
+  }
+  
   async componentDidMount() {
     try {
       const response = await fetch('https://reactnativecode.000webhostapp.com/FlowersList.php');
@@ -33,17 +51,29 @@ export default class HomeScreen extends Component {
         isLoading: false,
         dataSource: responseJson,
       }, () => {
+        console.log('hello App');
       });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
+    // const { manifest } = Constants;
+    //   const api = (typeof manifest.packagerOpts === 'object') && manifest.packagerOpts.dev
+    //     ? manifest.debuggerHost.split(':').shift()
+    //     : 'api.example.com';
+    //   console.log(api);
   }
-
+  componentWillUnmount() {
+    this.listener && Notifications.removeListener(this.listen)
+  }
+    listen = ({ origin, data}) => {
+      console.log('cool data', origin, data);
+    }
   getItem = (name) => {
     Alert.alert(name);
   }
 
+  
   renderSeperator = () => (
     <View
       style={{

@@ -1,23 +1,65 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-alert */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import {
- Text, View, StyleSheet, TextInput, Button
+  Text, View, StyleSheet, TextInput
 } from 'react-native';
+import { connect } from 'react-redux';
+import { Button, Avatar } from 'react-native-elements';
+import * as actions from '../actions/index';
+
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '' };
+    this.state = { email: '', password: '' };
   }
 
+  logIn() {
+    const { email } = this.state;
+    const { password } = this.state;
+    this.props.logIn(email, password).then(() => {
+      if (this.props.error) {
+        alert(this.props.error);
+      } else {
+        console.log(this.props.authData);
+      }
+    });
+  }
+
+  //   logOut() {
+  //     this.props.logOut();
+  //   }
+
   render() {
+    let loggedIn = false;
+    if (this.props.isLoggedIn) {
+      loggedIn = true;
+    }
+    if (loggedIn) {
+      return (
+        <View style={styles.container}>
+          <Text style={{ fontSize: 20 }}>{`Welcome ${this.state.email}`}</Text>
+          <Button
+            title="Log Out"
+            onPress={() => this.props.logOut()}
+            buttonStyle={{
+              backgroundColor: '#20ea53',
+            }}
+            containerStyle={{ padding: 30 }}
+          />
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <TextInput
           style={styles.textInputView}
           placeholder="   Email"
-          onChangeText={username => this.setState({ username })}
-          value={this.state.username}
+          onChangeText={email => this.setState({ email })}
+          value={this.state.email}
         />
         <TextInput
           style={styles.textInputView}
@@ -25,12 +67,13 @@ export default class LoginScreen extends Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Text style={{ padding: 10, fontSize: 20 }}>{`user input: ${this.state.username}`}</Text>
-        <Text style={{ padding: 10, fontSize: 20 }}>{`password input: ${this.state.password}`}</Text>
         <Button
           title="Login"
-          color="#f4dc04"
-          onPress={()=> alert(`Save ${this.state.username} and ${this.state.password}`)}
+          buttonStyle={{
+            backgroundColor: '#f4dc04',
+          }}
+          containerStyle={{ padding: 30 }}
+          onPress={() => this.logIn()}
         />
       </View>
     );
@@ -53,3 +96,17 @@ const styles = StyleSheet.create({
     marginBottom: 20
   }
 });
+
+const mapStateToProps = state => ({
+  isLoggedIn: state.auth.isLoggedIn,
+  isLoading: state.auth.isLoading,
+  authData: state.auth.authData,
+  error: state.auth.error
+});
+
+const mapDispatchToProps = dispatch => ({
+  logIn: (email, password) => dispatch(actions.logIn({ email, password })),
+  logOut: () => dispatch(actions.logOut()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "D:\\AwesomeProject"
+		},
+		{
+			"path": "D:\\NCTHydroponic"
+		},
+		{
+			"path": "D:\\reduxtest"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "C:\\msys32\\home\\kille\\esp\\Collect-v2.1\\Collect-v2"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"files.associations": {
+			"arduino.h": "c"
+		}
+	}
+}

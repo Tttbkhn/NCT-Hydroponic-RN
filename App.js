@@ -2,12 +2,16 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import { Avatar } from 'react-native-elements';
-import InfoStackScreen from './components/InfoStackScreen';
-import HomeScreen from './components/HomeScreen';
-import UserScreen from './components/UserScreen';
-import ContactScreen from './components/ContactScreen';
-import ControlScreen from './components/ControlScreen';
-import LoginScreen from './components/LoginScreen';
+import { Provider, connect } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import InfoStackScreen from './src/components/InfoStackScreen';
+import HomeScreen from './src/components/HomeScreen';
+import UserScreen from './src/components/UserScreen';
+import ContactScreen from './src/components/ContactScreen';
+import ControlScreen from './src/components/ControlScreen';
+import { persistor, store } from './src/store';
+import AuthScreen from './src/components/AuthScreen';
+import CropScreen from './src/components/CropScreen';
 
 export default class App extends React.Component {
   componentDidMount() {
@@ -16,7 +20,10 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <AppContainer />
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+
     );
   }
 }
@@ -28,7 +35,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     // iconName = `ios-home${focused ? '' : '-outline'}`;
     iconName = 'ios-home';
     // We want to add badges to home tab icon
-  } else if (routeName === 'Info') {
+  } else if (routeName === 'Crop') {
     iconName = 'ios-information-circle';
   } else if (routeName === 'Control') {
     iconName = 'ios-construct';
@@ -42,7 +49,8 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const TabNavigator = createBottomTabNavigator({
   Home: HomeScreen,
-  Info: InfoStackScreen,
+  //   Info: InfoStackScreen,
+  Crop: CropScreen,
   Control: ControlScreen,
   User: UserScreen,
   Contact: ContactScreen
@@ -70,7 +78,7 @@ const StackNavigator = createStackNavigator({
   MyTab: {
     screen: TabNavigator,
   },
-  Login: LoginScreen
+  Auth: AuthScreen
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
@@ -85,7 +93,7 @@ const StackNavigator = createStackNavigator({
       <Avatar
         rounded
         icon={{ name: 'user', type: 'font-awesome', color: 'white' }}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('Auth')}
         activeOpacity={0.7}
         overlayContainerStyle={{ backgroundColor: '#f4511e' }}
         containerStyle={{ marginRight: 5 }}
@@ -94,6 +102,11 @@ const StackNavigator = createStackNavigator({
   }),
 });
 
+const mapStateToProps = state => ({
+  userData: state.user.userData,
+});
+
+connect(mapStateToProps, null)(StackNavigator);
 
 const AppContainer = createAppContainer(StackNavigator);
 

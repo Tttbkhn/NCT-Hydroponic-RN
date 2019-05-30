@@ -26,8 +26,8 @@ export default class PHScreen extends Component {
             width: 25,
           }
         },
-        detail: { formatter: '{value}%' },
-        data: [{ value: 7, name: 'pH' }]
+        detail: { formatter: '{value}' },
+        data: [{ value: 7.3, name: 'pH' }]
       }]
     };
     return (

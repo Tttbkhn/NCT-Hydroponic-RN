@@ -1,3 +1,13 @@
-export const LOGIN = 'login';
-export const SIGNUP = 'signup';
-export const LOGOUT = 'logout';
+export const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
+export const LOGOUT = 'LOGOUT';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILED = 'SIGN_UP_FAILED';
+export const GET_USER = 'GET_USER';
+export const GET_ALL_DEVICES = 'GET_ALL_DEVICES';
+export const CREATE_SUCCESS = 'CREATE_SUCCESS';
+export const CREATE_ATTEMPT = 'CREATE_ATTEMPT';
+export const CREATE_FAILED = 'CREATE_FAILED';
+export const GET_PLANT = 'GET_PLANT';
+export const GET_CROP = 'GET_CROP';
