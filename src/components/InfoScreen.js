@@ -4,9 +4,13 @@ import {
 } from 'react-native';
 
 class InfoScreen extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+  }
+
+static navigationOptions = {
+    headerTitle: 'Hello',
+}
 
   componentDidMount() {
     // eslint-disable-next-line no-console

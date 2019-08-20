@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import Echarts from 'native-echarts';
+import { connect } from 'react-redux';
 
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class PHScreen extends Component {
+class PHScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: '' };
+  }
+
+  componentDidMount() {
+    const sensorArray = this.props.cropDataDetails.sensors;
+    const pHDetails = sensorArray.find(value => value.type === 1);
+    this.setState({ value: pHDetails.currentValue });
+    console.log(pHDetails.currentValue);
+  }
+
   render() {
     const option = {
       title: {
@@ -27,7 +40,7 @@ export default class PHScreen extends Component {
           }
         },
         detail: { formatter: '{value}' },
-        data: [{ value: 7.3, name: 'pH' }]
+        data: [{ value: this.state.value, name: 'pH' }]
       }]
     };
     return (
@@ -37,3 +50,9 @@ export default class PHScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  cropDataDetails: state.crop.cropDataDetails,
+});
+
+export default connect(mapStateToProps)(PHScreen);

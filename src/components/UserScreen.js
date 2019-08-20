@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, Clipboard } from 'react-native';
-import { Button } from 'react-native-elements';
+import {
+  View, Text, Clipboard, StyleSheet, FlatList
+} from 'react-native';
+import { Button, CheckBox } from 'react-native-elements';
+import { Notifications, Permissions } from 'expo';
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
+
+
+async function register() {
+  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  if (status !== 'granted') {
+    alert('You need to enable permission in settings');
+    return;
+  }
+  const token = await Notifications.getExpoPushTokenAsync();
+  console.log(status, token);
+}
 
 // eslint-disable-next-line react/prefer-stateless-function
 class UserScreen extends Component {
@@ -13,8 +27,15 @@ class UserScreen extends Component {
       name: '',
       deviceinfo: '',
       numofdevices: '',
+      checked: false,
     };
   }
+
+
+//   componentWillMount() {
+//     register();
+//     this.listener = Notifications.addListener(this.listen);
+//   }
 
   componentDidMount() {
     this.getUser();
@@ -28,13 +49,14 @@ class UserScreen extends Component {
     }
   }
 
+
   getAllDevices() {
     this.props.getAllDevices(this.props.authData).then(() => {
       if (this.props.error) {
         alert(this.props.error);
       } else {
-          this.setState({numofdevices: this.props.deviceData.content.length});
-        this.setState({deviceinfo: this.props.deviceData.content.map(content => content.id)});
+        this.setState({ numofdevices: this.props.deviceData.content.length });
+        this.setState({ deviceinfo: this.props.deviceData.content.map(content => content.id) });
       }
     });
   }
@@ -50,6 +72,35 @@ class UserScreen extends Component {
     });
   }
 
+//   componentWillUnmount() {
+//     this.listener && Notifications.removeListener(this.listen);
+//   }
+
+    listen = ({ origin, data }) => {
+      console.log('cool data', origin, data);
+    }
+
+    checkBoxControl() {
+      this.setState({ checked: !this.state.checked });
+      if (this.state.checked === false) {
+        register();
+        this.listener = Notifications.addListener(this.listen);
+        alert('Turn on Open Field Mode');
+      } else {
+        alert('Turn off Open Field Mode');
+        // this.listener && Notifications.removeEventListener(this.listen);
+      }
+    }
+
+  renderSeperator = () => (
+    <View
+      style={{
+        height: 1,
+        backgroundColor: '#CED0CE',
+      }}
+    />
+  )
+
   copyToken() {
     Clipboard.setString(this.props.authData.accessToken);
     alert('Copied');
@@ -63,8 +114,6 @@ class UserScreen extends Component {
     if (loggedIn) {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>{this.state.username}</Text>
-          <Text>{this.state.name}</Text>
           <Button
             title="Click here to copy the authorization token to clipboard"
             buttonStyle={{
@@ -73,23 +122,74 @@ class UserScreen extends Component {
             containerStyle={{ padding: 30 }}
             onPress={() => this.copyToken()}
           />
-          <Text>
-            Number of Devices Available:
-            {' '}
-            {this.state.numofdevices}
-          </Text>
-          <Text>{this.state.deviceinfo}</Text>
+          <View style={styles.listView}>
+            <FlatList
+              data={[
+                {
+                  key: 'Username',
+                  description: this.state.username,
+                },
+                {
+                  key: 'Name',
+                  description: this.state.name
+                },
+                {
+                  key: 'Number of Devices Available',
+                  description: this.state.numofdevices
+                },
+              ]}
+              renderItem={({ item }) => (
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <Text style={styles.keyView}>{item.key}</Text>
+                  <Text style={styles.descriptionView}>{item.description}</Text>
+                </View>
+              )}
+              ItemSeparatorComponent={this.renderSeperator}
+            />
+          </View>
+          <CheckBox
+            center
+            title="Open Field mode"
+            checked={this.state.checked}
+            onPress={() => this.checkBoxControl()}
+          />
+
         </View>
       );
     }
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Please Log In Again To Have Your Information</Text>
+        <Text style={{ fontSize: 15 }}>Please Log In Again To Have Your Information</Text>
       </View>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  textView: {
+    fontSize: 18,
+  },
+  buttonContainer: {
+    padding: 30,
+  },
+  buttonStyle: {
+    backgroundColor: '#f3dc04',
+  },
+  keyView: {
+    padding: 10,
+    fontSize: 15,
+    flex: 1
+  },
+  descriptionView: {
+    padding: 10,
+    fontSize: 15,
+    marginLeft: 20
+  },
+  listView: {
+    width: 300,
+    paddingTop: 30,
+  }
+});
 
 const mapStateToProps = state => ({
   isLoggedIn: state.auth.isLoggedIn,

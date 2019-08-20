@@ -1,12 +1,12 @@
 import {
-  CREATE_SUCCESS, CREATE_ATTEMPT, CREATE_FAILED, GET_CROP
+  CREATE_SUCCESS, CREATE_ATTEMPT, CREATE_FAILED, GET_CROP, GET_CROP_DETAILS, STOP_CROP, DELETE_CROP
 } from './types';
 import api from '../Constants/constants';
 
-export function createSuccess(cropData) {
+export function createSuccess(createData) {
   return {
     type: CREATE_SUCCESS,
-    cropData
+    createData
   };
 }
 
@@ -31,6 +31,34 @@ export function getSuccess(cropData) {
   };
 }
 
+export function getDetailsSuccess(cropData) {
+  return {
+    type: GET_CROP_DETAILS,
+    cropData
+  };
+}
+
+export function deleteCropSuccess(deleteData) {
+  return {
+    type: DELETE_CROP,
+    deleteData
+  };
+}
+
+export function stopCropSuccess(stopData) {
+  return {
+    type: STOP_CROP,
+    stopData,
+  };
+}
+
+// export function isOutOfCrop(bool) {
+//   return {
+//     type: IS_OUT_OF_CROP,
+//     isGoneToCrop: bool
+//   };
+// }
+
 export function createCrop(data) {
   return (dispatch) => {
     dispatch(isLoadingCreate(true));
@@ -38,7 +66,7 @@ export function createCrop(data) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${data.accessToken}`
+        Authorization: `Bearer ${data.authData.accessToken}`
       },
       body: JSON.stringify({
         name: data.name,
@@ -69,12 +97,13 @@ export function createCrop(data) {
   };
 }
 
+
 export function getCrop(data) {
   return dispatch => fetch(`http://${api}/api/crop`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${data.accessToken}`
+      Authorization: `Bearer ${data.accessToken}`
     }
   })
     .then((response) => {
@@ -82,6 +111,81 @@ export function getCrop(data) {
         response.json().then((responseJSON) => {
           console.log('responseJSON', responseJSON);
           dispatch(getSuccess(responseJSON));
+        });
+      } else {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+        });
+      }
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
+}
+
+export function getCropDetails(authData, data) {
+  return dispatch => fetch(`http://${api}/api/crop/${data}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authData.accessToken}`
+    }
+  })
+    .then((response) => {
+      if (response.status < 300) {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+          dispatch(getDetailsSuccess(responseJSON));
+        });
+      } else {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+        });
+      }
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
+}
+
+export function stopCrop(authData, cropId) {
+  return dispatch => fetch(`http://${api}/api/crop/stop?cropId=${cropId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authData.accessToken}`
+    }
+  })
+    .then((response) => {
+      if (response.status < 300) {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+          dispatch(stopCropSuccess(responseJSON));
+        });
+      } else {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+        });
+      }
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
+}
+
+export function deleteCrop(authData, cropId) {
+  return dispatch => fetch(`http://${api}/api/crop?cropId=${cropId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authData.accessToken}`
+    }
+  })
+    .then((response) => {
+      if (response.status < 300) {
+        response.json().then((responseJSON) => {
+          console.log('responseJSON', responseJSON);
+          dispatch(deleteCropSuccess(responseJSON));
         });
       } else {
         response.json().then((responseJSON) => {

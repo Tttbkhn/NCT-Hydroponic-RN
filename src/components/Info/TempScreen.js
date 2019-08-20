@@ -4,33 +4,32 @@ import Echarts from 'native-echarts';
 import { connect } from 'react-redux';
 
 // eslint-disable-next-line react/prefer-stateless-function
-class ECScreen extends Component {
+class TempScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
   }
 
-
   componentDidMount() {
     const sensorArray = this.props.cropDataDetails.sensors;
-    const ECDetails = sensorArray.find(value => value.type === 4);
-    this.setState({ value: ECDetails.currentValue });
-    console.log(ECDetails.currentValue);
+    const TempDetails = sensorArray.find(value => value.type === 2);
+    this.setState({ value: TempDetails.currentValue });
+    console.log(TempDetails.currentValue);
   }
 
   render() {
     const option = {
       title: {
-        text: 'EC'
+        text: 'Temperature'
       },
       tooltip: {
         formatter: '{a} <br/>{b} : {c}%'
       },
       series: [{
-        name: 'EC',
+        name: 'Temperature',
         type: 'gauge',
         min: 0,
-        max: 20,
+        max: 50,
         splitNumber: 10,
         radius: '90%',
         axisLine: {
@@ -40,7 +39,7 @@ class ECScreen extends Component {
           }
         },
         detail: { formatter: '{value}' },
-        data: [{ value: this.state.value, name: 'EC' }]
+        data: [{ value: this.state.value, name: 'Temperature' }]
       }]
     };
     return (
@@ -55,4 +54,4 @@ const mapStateToProps = state => ({
   cropDataDetails: state.crop.cropDataDetails,
 });
 
-export default connect(mapStateToProps)(ECScreen);
+export default connect(mapStateToProps)(TempScreen);

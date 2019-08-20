@@ -1,8 +1,10 @@
-import { GET_ALL_DEVICES } from '../actions/types';
+import { GET_ALL_DEVICES, GET_ACTUATOR_STATUS, CONTROL_ACTUATOR } from '../actions/types';
 
 const INITIAL_STATE = {
   deviceData: {},
-  error: undefined
+  error: undefined,
+  actuatorData: {},
+  controlData: {}
 };
 
 export default function device(state = INITIAL_STATE, action) {
@@ -13,6 +15,17 @@ export default function device(state = INITIAL_STATE, action) {
       ...state,
       deviceData: action.deviceData,
       error: undefined
+    };
+  case GET_ACTUATOR_STATUS:
+    return {
+      ...state,
+      actuatorData: action.actuatorData
+    };
+  case CONTROL_ACTUATOR:
+    return {
+      ...state,
+      error: undefined,
+      controlData: action.controlData
     };
   default:
     return state;

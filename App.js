@@ -4,6 +4,7 @@ import { createBottomTabNavigator, createAppContainer, createStackNavigator } fr
 import { Avatar } from 'react-native-elements';
 import { Provider, connect } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
+import * as actions from './src/actions/index';
 import InfoStackScreen from './src/components/InfoStackScreen';
 import HomeScreen from './src/components/HomeScreen';
 import UserScreen from './src/components/UserScreen';
@@ -11,11 +12,15 @@ import ContactScreen from './src/components/ContactScreen';
 import ControlScreen from './src/components/ControlScreen';
 import { persistor, store } from './src/store';
 import AuthScreen from './src/components/AuthScreen';
-import CropScreen from './src/components/CropScreen';
+import CropStackScreen from './src/components/CropStackScreen';
 
 export default class App extends React.Component {
   componentDidMount() {
     console.log('hello');
+  }
+
+  constructor(props) {
+    super(props);
   }
 
   render() {
@@ -43,15 +48,14 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     iconName = 'ios-contact';
   } else iconName = 'ios-call';
 
-  // You can return any component that you like here!
   return <IconComponent name={iconName} size={25} color={tintColor} />;
 };
 
 const TabNavigator = createBottomTabNavigator({
   Home: HomeScreen,
   //   Info: InfoStackScreen,
-  Crop: CropScreen,
-  Control: ControlScreen,
+  Crop: CropStackScreen,
+  //   Control: ControlScreen,
   User: UserScreen,
   Contact: ContactScreen
 },
@@ -69,9 +73,16 @@ const TabNavigator = createBottomTabNavigator({
 TabNavigator.navigationOptions = ({ navigation }) => {
   const { routeName } = navigation.state.routes[navigation.state.index];
   const headerTitle = routeName;
-  return {
-    headerTitle
-  };
+  //   if (navigation.state.routes[1].routes.length > 1) {
+  //     headerTitle = 'Hello';
+  //   }
+  //   if (store.getState().crop.isGoneToCrop) {
+  //     headerTitle = 'Hello';
+  //   } else headerTitle = routeName;
+  //   return {
+  //     headerTitle
+  //   };
+  return { headerTitle };
 };
 
 const StackNavigator = createStackNavigator({
@@ -104,9 +115,14 @@ const StackNavigator = createStackNavigator({
 
 const mapStateToProps = state => ({
   userData: state.user.userData,
+  isGoneToCrop: state.crop.isGoneToCrop,
 });
 
-connect(mapStateToProps, null)(StackNavigator);
+// const mapDispatchToProps = dispatch => ({
+//   goToCrop: bool => dispatch(actions.goToCrop(bool)),
+// });
+
+connect(mapStateToProps)(App);
 
 const AppContainer = createAppContainer(StackNavigator);
 
